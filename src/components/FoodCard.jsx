@@ -1,11 +1,22 @@
-import { Link } from 'react-router-dom'
+import { Link } from "react-router-dom";
+
+// 메뉴의 데이터와 일정 기준을 비교하고 뱃지 태그 부여 
+function getNutritionBadges(food) {
+  const badges = [];
+
+  if (food.protein >= 31) {
+    badges.push({ label: "고단백", style: "bg-red-500/10 text-red-700" });
+  }
+
+  if (food.fat >= 23) {
+    badges.push({ label: "고지방", style: "bg-green-500/10 text-green-700" });
+  }
+
+  return badges;
+}
 
 export default function FoodCard({ food }) {
-  const nutritionBadges = [
-    { label: '칼로리', value: `${food.calorie} kcal`, color: 'bg-yellow-500/10 text-yellow-700' },
-    { label: '단백질', value: `${food.protein} g`, color: 'bg-red-500/10 text-red-700' },
-    { label: '지방', value: `${food.fat} g`, color: 'bg-green-500/10 text-green-700' },
-  ];
+  const nutritionBadges = getNutritionBadges(food);
 
   return (
     <Link 
@@ -15,10 +26,24 @@ export default function FoodCard({ food }) {
     >
       <div className="relative h-48 overflow-hidden">
         <img 
-          src={`https://picsum.photos/300/200?random=${food.id}`} 
+          src={food.imageURL} 
           alt={`${food.title} 음식 이미지`}
           className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
         />
+
+        {/* 고단백 / 저지방 뱃지 태그 (이미지 위) */}
+        {nutritionBadges.length > 0 && (
+          <div className="absolute top-3 left-3 flex gap-2">
+            {nutritionBadges.map((badge) => (
+              <span
+                key={badge.label}
+                className={`px-3 py-1 rounded-full text-xs font-semibold ${badge.style}`}
+              >
+                {badge.label}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
       
       <div className="p-5">
@@ -26,12 +51,13 @@ export default function FoodCard({ food }) {
           {food.title}
         </h3>
         
+        {/* 칼로리 배지 태그 */}
         <div className="flex flex-wrap gap-2 text-sm mt-3">
           <div className="px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-700 font-medium">
-            칼로리: {food.calorie} kcal
+            {food.calorie} kcal
           </div>
         </div>
       </div>
     </Link>
-  )
+  );
 }

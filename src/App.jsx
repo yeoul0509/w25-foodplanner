@@ -1,10 +1,8 @@
 import { Routes, Route } from 'react-router-dom'
-//import { useState, useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import FoodList from './pages/FoodList.jsx'
 import FoodDetail from './pages/FoodDetail.jsx'
 import { getFoodList } from './api/foodApi'
-
 
 function App() {
   const { data: foods, isLoading, isError, error } = useQuery({
@@ -29,3 +27,4 @@ function App() {
 }
 
 export default App
+
